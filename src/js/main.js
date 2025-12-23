@@ -24,8 +24,12 @@ let replayButton;
 
 // Intro event listeners (to be removed after first interaction)
 let introClickHandler;
+let introTouchStartHandler;
+let introTouchEndHandler;
 let introWheelHandler;
 let introKeydownHandler;
+let touchStartY = 0;
+let touchStartX = 0;
 
 // Envelope teaser timer
 let envelopeIdleTimer = null;
@@ -83,6 +87,28 @@ function init() {
  */
 function setupIntroListeners() {
     introClickHandler = handleIntroInteraction;
+    introTouchStartHandler = (e) => {
+        // Store touch start position to detect taps vs swipes
+        if (e.touches && e.touches.length > 0) {
+            touchStartX = e.touches[0].clientX;
+            touchStartY = e.touches[0].clientY;
+        }
+    };
+    introTouchEndHandler = (e) => {
+        // Only trigger if it's a tap (not a swipe)
+        if (e.changedTouches && e.changedTouches.length > 0) {
+            const touchEndX = e.changedTouches[0].clientX;
+            const touchEndY = e.changedTouches[0].clientY;
+            const deltaX = Math.abs(touchEndX - touchStartX);
+            const deltaY = Math.abs(touchEndY - touchStartY);
+            
+            // If movement is less than 10px, consider it a tap
+            if (deltaX < 10 && deltaY < 10) {
+                e.preventDefault(); // Prevent both touch and click from firing
+                handleIntroInteraction();
+            }
+        }
+    };
     introWheelHandler = handleIntroInteraction;
     introKeydownHandler = (e) => {
         if (e.key === 'Enter' || e.key === ' ') {
@@ -92,6 +118,8 @@ function setupIntroListeners() {
     };
 
     window.addEventListener('click', introClickHandler, { once: true });
+    window.addEventListener('touchstart', introTouchStartHandler, { once: false, passive: true });
+    window.addEventListener('touchend', introTouchEndHandler, { once: true, passive: false });
     window.addEventListener('wheel', introWheelHandler, { once: true, passive: true });
     window.addEventListener('keydown', introKeydownHandler, { once: true });
 }
@@ -108,6 +136,8 @@ function handleIntroInteraction() {
  */
 function removeIntroListeners() {
     window.removeEventListener('click', introClickHandler);
+    window.removeEventListener('touchstart', introTouchStartHandler);
+    window.removeEventListener('touchend', introTouchEndHandler);
     window.removeEventListener('wheel', introWheelHandler);
     window.removeEventListener('keydown', introKeydownHandler);
 }
