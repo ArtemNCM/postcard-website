@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <title>New Year Postcard</title>
+    <link rel="stylesheet" href="src/css/reset.css">
+    <link rel="stylesheet" href="src/css/styles.css">
+    <link rel="stylesheet" href="src/css/animations.css">
+</head>
+<body class="state-intro">
+    <div id="app">
+        <section id="intro-screen" class="screen screen-active">
+            <h1>There you are, right on time</h1>
+            <p>Someone left a letter for you</p>
+            <div class="intro-hint">Tap to continue</div>
+        </section>
+
+        <section id="main-screen" class="screen screen-inactive">
+            <div class="video-background">
+                <video
+                    id="background-video"
+                    autoplay
+                    muted
+                    loop
+                    playsinline
+                >
+                    <source src="./public/video/background.mp4" type="video/mp4" />
+                    Your browser does not support the video tag.
+                </video>
+            </div>
+            
+            <div id="envelope-teaser">
+                <div class="envelope-image"></div>
+                <span class="envelope-text">Open me</span>
+            </div>
+
+            <div id="envelope-stage" class="hidden">
+                <div class="envelope-container">
+                    <div class="envelope-body">
+                        <div class="envelope-flap"></div>
+                        <div class="envelope-inner-shadow"></div>
+                    </div>
+                    <article class="letter letter-hidden">
+                        <img src="./public/video/images/letter.png" alt="Letter" class="letter-image" />
+                        <div class="letter-content">
+                            <h2>To Anna,</h2>
+                            <div class="letter-subline">Happy New Year!</div>
+                            <p>May you learn fast, choose wisely, and end the year feeling more like yourself.</p>
+                            <div class="cn-vertical">
+                            愿新岁把偶然变成福运<br>
+                            把磨难化作力量
+                            </div>
+                        </div>
+                    </article>
+                    <div class="envelope-hint">Tap to open</div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="src/js/main.js"></script>
+</body>
+</html>
+
